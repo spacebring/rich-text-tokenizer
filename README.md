@@ -4,7 +4,7 @@
 [![Dependency Status](https://david-dm.org/andcards/rich-text-tokenizer.svg)](https://david-dm.org/andcards/rich-text-tokenizer)
 [![devDependency Status](https://david-dm.org/andcards/rich-text-tokenizer/dev-status.svg)](https://david-dm.org/andcards/rich-text-tokenizer#info=devDependencies)
 
-Markdown tokenization made easy.
+Rich text and markdown tokenization made easy.
 
 ### Installation
 
