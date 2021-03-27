@@ -62,5 +62,9 @@ describe("parseMarkdown", () => {
       { type: "mention", mention: "mention", value: "@mention" },
       { type: "text", value: "*bold" },
     ]);
+    expect(parseMarkdown(`[rich links](https://www.andcards.com/) :)`)).is.deep.equal([
+      { type: "link", href: "https://www.andcards.com/", value: "rich links" },
+      { type: "text", value: " :)" },
+    ]);
   });
 });
