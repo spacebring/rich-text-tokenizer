@@ -49,18 +49,33 @@ describe("parseMarkdown", () => {
         type: "bold",
       },
     ]);
+    expect(parseMarkdown(`~~[anchor](https://www.facebook.com)~~`)).is.deep.equal([
+      {
+        children: [{ type: "link", href: "https://www.facebook.com", value: "anchor" }],
+        type: "strikethrough",
+      },
+    ]);
     expect(parseMarkdown(`#first_hash #second_hash`)).is.deep.equal([
       { type: "hashtag", hashtag: "first_hash", value: "#first_hash" },
       { type: "text", value: " " },
       { type: "hashtag", hashtag: "second_hash", value: "#second_hash" },
     ]);
-    expect(parseMarkdown(`#first*hash #second*hash @mention*bold`)).is.deep.equal([
+    expect(parseMarkdown(`#first*hash #second*hash @mention*bold ~~strikethrough~~`)).is.deep.equal([
       { type: "hashtag", hashtag: "first*hash", value: "#first*hash" },
       { type: "text", value: " " },
       { type: "hashtag", hashtag: "second*hash", value: "#second*hash" },
       { type: "text", value: " " },
       { type: "mention", mention: "mention", value: "@mention" },
-      { type: "text", value: "*bold" },
+      { type: "text", value: "*bold " },
+      {
+        children: [
+          {
+            type: "text",
+            value: "strikethrough",
+          },
+        ],
+        type: "strikethrough",
+      },
     ]);
     expect(parseMarkdown(`[rich links](https://www.andcards.com/) :)`)).is.deep.equal([
       { type: "link", href: "https://www.andcards.com/", value: "rich links" },

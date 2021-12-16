@@ -4,7 +4,7 @@ function replaceHashesWithTokens({ children, hashObject, parse }) {
   // Reference: https://stackoverflow.com/a/12002085/1308757
   const keysRegex = new RegExp(`(${keys.join("|")})`, "g");
   return children.reduce((tokens, token) => {
-    if (["bold", "italic"].includes(token.type)) {
+    if (["strikethrough", "bold", "italic"].includes(token.type)) {
       return [
         ...tokens,
         {

@@ -19,6 +19,7 @@ import replaceHashesWithTokens from "./hash";
 const REGEX_MARKDOWN_BOLD = /(\*\*)(.*?)\1|(__)(.*?)\3/;
 const REGEX_MARKDOWN_URL = /\[(.*?)\]\((.*?)\)/;
 const REGEX_MARKDOWN_ITALIC = /(\*)(.*?)\1|(_)(.*?)\3/;
+const REGEX_MARKDOWN_STRIKOTHROUGH = /(~~)(.*?)\1/;
 
 function getResultFromTokenBold(token) {
   if (token[1]) {
@@ -26,6 +27,13 @@ function getResultFromTokenBold(token) {
   }
   if (token[3]) {
     return { type: "bold", value: token[4] };
+  }
+  return null;
+}
+
+function getResultFromTokenStrikethrough(token) {
+  if (token[1]) {
+    return { type: "strikethrough", value: token[2] };
   }
   return null;
 }
@@ -58,12 +66,21 @@ function parseTokenWithChildren({ markdown, parse, result, token }) {
   ];
 }
 
-function parseMarkdownBoldAndItalic(markdown) {
+function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
+  const tokenStrikethrough = REGEX_MARKDOWN_STRIKOTHROUGH.exec(markdown);
+  if (tokenStrikethrough) {
+    return parseTokenWithChildren({
+      markdown,
+      parse: parseMarkdownStrikethroughAndBoldAndItalic,
+      result: getResultFromTokenStrikethrough(tokenStrikethrough),
+      token: tokenStrikethrough,
+    });
+  }
   const tokenBold = REGEX_MARKDOWN_BOLD.exec(markdown);
   if (tokenBold) {
     return parseTokenWithChildren({
       markdown,
-      parse: parseMarkdownBoldAndItalic,
+      parse: parseMarkdownStrikethroughAndBoldAndItalic,
       result: getResultFromTokenBold(tokenBold),
       token: tokenBold,
     });
@@ -72,7 +89,7 @@ function parseMarkdownBoldAndItalic(markdown) {
   if (tokenItalic) {
     return parseTokenWithChildren({
       markdown,
-      parse: parseMarkdownBoldAndItalic,
+      parse: parseMarkdownStrikethroughAndBoldAndItalic,
       result: getResultFromTokenItalic(tokenItalic),
       token: tokenItalic,
     });
@@ -152,8 +169,8 @@ function parseMarkdown(markdown) {
       return token.value;
     })
     .join("");
-  // Parse bold and italic text and replace with tokens.
-  const markdownParsed = parseMarkdownBoldAndItalic(markdownWithoutPrimitives);
+  // Parse strikethrough, bold and italic text and replace with tokens.
+  const markdownParsed = parseMarkdownStrikethroughAndBoldAndItalic(markdownWithoutPrimitives);
   // Replace hashes back with tokens.
   return replaceHashesWithTokens({
     children: markdownParsed,
