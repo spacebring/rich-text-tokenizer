@@ -68,7 +68,16 @@ function parseTokenWithChildren({ markdown, parse, result, token }) {
 
 function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
   const tokenStrikethrough = REGEX_MARKDOWN_STRIKOTHROUGH.exec(markdown);
-  if (tokenStrikethrough) {
+  const tokenBold = REGEX_MARKDOWN_BOLD.exec(markdown);
+  const tokenItalic = REGEX_MARKDOWN_ITALIC.exec(markdown);
+  const index = Math.min(
+    ...[
+      ...(tokenStrikethrough ? [tokenStrikethrough.index] : []),
+      ...(tokenBold ? [tokenBold.index] : []),
+      ...(tokenItalic ? [tokenItalic.index] : []),
+    ]
+  );
+  if (tokenStrikethrough && tokenStrikethrough.index === index) {
     return parseTokenWithChildren({
       markdown,
       parse: parseMarkdownStrikethroughAndBoldAndItalic,
@@ -76,8 +85,7 @@ function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
       token: tokenStrikethrough,
     });
   }
-  const tokenBold = REGEX_MARKDOWN_BOLD.exec(markdown);
-  if (tokenBold) {
+  if (tokenBold && tokenBold.index === index) {
     return parseTokenWithChildren({
       markdown,
       parse: parseMarkdownStrikethroughAndBoldAndItalic,
@@ -85,8 +93,7 @@ function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
       token: tokenBold,
     });
   }
-  const tokenItalic = REGEX_MARKDOWN_ITALIC.exec(markdown);
-  if (tokenItalic) {
+  if (tokenItalic && tokenItalic.index === index) {
     return parseTokenWithChildren({
       markdown,
       parse: parseMarkdownStrikethroughAndBoldAndItalic,

@@ -77,6 +77,39 @@ describe("parseMarkdown", () => {
         type: "strikethrough",
       },
     ]);
+    expect(parseMarkdown(`**_~~b i del~~_**`)).is.deep.equal([
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [{ type: "text", value: "b i del" }],
+                type: "strikethrough",
+              },
+            ],
+            type: "italic",
+          },
+        ],
+        type: "bold",
+      },
+    ]);
+    expect(parseMarkdown(`**_~~strikethrough~~ & asd_**`)).is.deep.equal([
+      {
+        children: [
+          {
+            children: [
+              {
+                children: [{ type: "text", value: "strikethrough" }],
+                type: "strikethrough",
+              },
+              { type: "text", value: " & asd" },
+            ],
+            type: "italic",
+          },
+        ],
+        type: "bold",
+      },
+    ]);
     expect(parseMarkdown(`[rich links](https://www.andcards.com/) :)`)).is.deep.equal([
       { type: "link", href: "https://www.andcards.com/", value: "rich links" },
       { type: "text", value: " :)" },
