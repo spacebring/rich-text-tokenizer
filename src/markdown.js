@@ -16,92 +16,59 @@ import {
 import replaceHashesWithTokens from "./hash";
 
 // Reference: https://www.bigomega.dev/markdown-parser
-const REGEX_MARKDOWN_BOLD = /(\*\*)(.*?)\1|(__)(.*?)\3/;
+const REGEX_MARKDOWN_TEXT = /(\*\*)(.*?)\1|(__)(.*?)\3|(\*)(.*?)\5|(_)(.*?)\7|(~~)(.*?)\9/;
 const REGEX_MARKDOWN_URL = /\[(.*?)\]\((.*?)\)/;
-const REGEX_MARKDOWN_ITALIC = /(\*)(.*?)\1|(_)(.*?)\3/;
-const REGEX_MARKDOWN_STRIKOTHROUGH = /(~~)(.*?)\1/;
 
-function getResultFromTokenBold(token) {
+function getResultFromToken(token) {
   if (token[1]) {
     return { type: "bold", value: token[2] };
   }
   if (token[3]) {
     return { type: "bold", value: token[4] };
   }
-  return null;
-}
-
-function getResultFromTokenStrikethrough(token) {
-  if (token[1]) {
-    return { type: "strikethrough", value: token[2] };
+  if (token[5]) {
+    return { type: "italic", value: token[6] };
+  }
+  if (token[7]) {
+    return { type: "italic", value: token[8] };
+  }
+  if (token[9]) {
+    return { type: "strikethrough", value: token[10] };
   }
   return null;
-}
-
-function getResultFromTokenUrl(token) {
-  if (token[1] && token[2]) {
-    return { type: "link", href: token[2], value: token[1] };
-  }
-  return null;
-}
-
-function getResultFromTokenItalic(token) {
-  if (token[1]) {
-    return { type: "italic", value: token[2] };
-  }
-  if (token[3]) {
-    return { type: "italic", value: token[4] };
-  }
-  return null;
-}
-
-function parseTokenWithChildren({ markdown, parse, result, token }) {
-  if (!result) {
-    return getTypeText(markdown);
-  }
-  return [
-    ...parse(markdown.substring(0, token.index)),
-    { ...result, children: parse(result.value) },
-    ...parse(markdown.substring(token.index + token[0].length)),
-  ];
 }
 
 function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
-  const tokenStrikethrough = REGEX_MARKDOWN_STRIKOTHROUGH.exec(markdown);
-  const tokenBold = REGEX_MARKDOWN_BOLD.exec(markdown);
-  const tokenItalic = REGEX_MARKDOWN_ITALIC.exec(markdown);
-  const index = Math.min(
-    ...[
-      ...(tokenStrikethrough ? [tokenStrikethrough.index] : []),
-      ...(tokenBold ? [tokenBold.index] : []),
-      ...(tokenItalic ? [tokenItalic.index] : []),
-    ]
-  );
-  if (tokenStrikethrough && tokenStrikethrough.index === index) {
-    return parseTokenWithChildren({
-      markdown,
-      parse: parseMarkdownStrikethroughAndBoldAndItalic,
-      result: getResultFromTokenStrikethrough(tokenStrikethrough),
-      token: tokenStrikethrough,
-    });
+  const tokenUrlNaked = REGEX_URL_NAKED.exec(markdown);
+  if (tokenUrlNaked) {
+    return getTypeText(markdown);
   }
-  if (tokenBold && tokenBold.index === index) {
-    return parseTokenWithChildren({
-      markdown,
-      parse: parseMarkdownStrikethroughAndBoldAndItalic,
-      result: getResultFromTokenBold(tokenBold),
-      token: tokenBold,
-    });
+  const token = REGEX_MARKDOWN_TEXT.exec(markdown);
+  if (!token) {
+    return getTypeText(markdown);
   }
-  if (tokenItalic && tokenItalic.index === index) {
-    return parseTokenWithChildren({
-      markdown,
-      parse: parseMarkdownStrikethroughAndBoldAndItalic,
-      result: getResultFromTokenItalic(tokenItalic),
-      token: tokenItalic,
-    });
+  const result = getResultFromToken(token);
+  if (!result) {
+    return getTypeText(markdown);
   }
-  return getTypeText(markdown);
+  const { value, ...resultWithNoValue } = result;
+  return [
+    ...parseMarkdownStrikethroughAndBoldAndItalic(markdown.substring(0, token.index)),
+    { ...resultWithNoValue, children: parseMarkdownStrikethroughAndBoldAndItalic(value) },
+    ...parseMarkdownStrikethroughAndBoldAndItalic(markdown.substring(token.index + token[0].length)),
+  ];
+}
+
+function getResultFromTokenUrl(token) {
+  const [value, href] = token.slice(1);
+  if (value && href) {
+    const children = parseMarkdownStrikethroughAndBoldAndItalic(value);
+    if (children.length === 1 && children[0].type === "text") {
+      return { type: "link", href, value };
+    }
+    return { type: "link", href, children };
+  }
+  return null;
 }
 
 function parseMarkdownPrimitives(text) {
