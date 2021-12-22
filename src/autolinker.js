@@ -1,8 +1,8 @@
-import emailRegex from "email-regex";
 import hashtagRegex from "hashtag-regex";
 import urlRegex from "url-regex";
 
-export const REGEX_EMAIL = emailRegex();
+// Reference: https://www.regular-expressions.info/email.html
+export const REGEX_EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
 export const REGEX_HASHTAG = hashtagRegex();
 // Reference: https://stackoverflow.com/a/15265606/1308757
 export const REGEX_MENTION = /\B@[a-z0-9_-]+/;
