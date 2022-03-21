@@ -75,11 +75,7 @@ function getResultFromTokenUrl(token) {
 function getResultFromTokenImage(token) {
   const [value, href] = token.slice(1);
   if (value && href) {
-    const children = parseMarkdownStrikethroughAndBoldAndItalic(value);
-    if (children.length === 1 && children[0].type === "text") {
-      return { type: "image", href, value };
-    }
-    return { type: "image", href, children };
+    return { type: "image", href, value };
   }
   return null;
 }
