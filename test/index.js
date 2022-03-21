@@ -19,6 +19,18 @@ describe("parseMarkdown", () => {
       { children: [{ type: "link", href: "https://www.facebook.com", value: "anchor" }], type: "strikethrough" },
     ]);
   });
+  it("should return parsed image", () => {
+    expect(parseMarkdown(`![rich links](https://www.andcards.com/) :)`)).is.deep.equal([
+      { type: "image", href: "https://www.andcards.com/", value: "rich links" },
+      { type: "text", value: " :)" },
+    ]);
+    expect(parseMarkdown(`__![anchor](https://www.facebook.com)__`)).is.deep.equal([
+      { children: [{ type: "image", href: "https://www.facebook.com", value: "anchor" }], type: "bold" },
+    ]);
+    expect(parseMarkdown(`~~![anchor](https://www.facebook.com)~~`)).is.deep.equal([
+      { children: [{ type: "image", href: "https://www.facebook.com", value: "anchor" }], type: "strikethrough" },
+    ]);
+  });
   it("should return parsed hashtags and mentions", () => {
     expect(parseMarkdown(`#first_hash #second_hash`)).is.deep.equal([
       { type: "hashtag", hashtag: "first_hash", value: "#first_hash" },
@@ -64,6 +76,23 @@ describe("parseMarkdown", () => {
         href:
           "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         type: "link",
+        value: "Пристойний Стндап",
+      },
+      { type: "text", value: " відсвяткувати кінець робочого тижня💪🏼" },
+    ]);
+    expect(
+      parseMarkdown(
+        "Вечір п'ятниці для відвертих тем і міцних жартів. Приходьте на ![Пристойний Стндап](https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D) відсвяткувати кінець робочого тижня💪🏼"
+      )
+    ).is.deep.equal([
+      {
+        type: "text",
+        value: "Вечір п'ятниці для відвертих тем і міцних жартів. Приходьте на ",
+      },
+      {
+        href:
+          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        type: "image",
         value: "Пристойний Стндап",
       },
       { type: "text", value: " відсвяткувати кінець робочого тижня💪🏼" },

@@ -17,6 +17,7 @@ import replaceHashesWithTokens from "./hash";
 
 // Reference: https://www.bigomega.dev/markdown-parser
 const REGEX_MARKDOWN_TEXT = /(\*\*)(.*?)\1|(__)(.*?)\3|(\*)(.*?)\5|(_)(.*?)\7|(~~)(.*?)\9/;
+const REGEX_MARKDOWN_IMAGE = /!\[(.*?)\]\((.*?)\)/;
 const REGEX_MARKDOWN_URL = /\[(.*?)\]\((.*?)\)/;
 
 function getResultFromToken(token) {
@@ -71,8 +72,29 @@ function getResultFromTokenUrl(token) {
   return null;
 }
 
+function getResultFromTokenImage(token) {
+  const [value, href] = token.slice(1);
+  if (value && href) {
+    const children = parseMarkdownStrikethroughAndBoldAndItalic(value);
+    if (children.length === 1 && children[0].type === "text") {
+      return { type: "image", href, value };
+    }
+    return { type: "image", href, children };
+  }
+  return null;
+}
+
 function parseMarkdownPrimitives(text) {
   // Parse markdown links in order to prevent closing ")" to be considered as a part of the link.
+  const tokenImage = REGEX_MARKDOWN_IMAGE.exec(text);
+  if (tokenImage) {
+    return parseToken({
+      parse: parseMarkdownPrimitives,
+      result: getResultFromTokenImage(tokenImage),
+      text,
+      token: tokenImage,
+    });
+  }
   const tokenUrl = REGEX_MARKDOWN_URL.exec(text);
   if (tokenUrl) {
     return parseToken({
@@ -135,7 +157,7 @@ function parseMarkdown(markdown) {
   // Replace primitives and replace with appropriate hashes.
   const markdownWithoutPrimitives = parseMarkdownPrimitives(markdown)
     .map((token) => {
-      if (["email", "hashtag", "link", "mention", "phone"].includes(token.type)) {
+      if (["email", "hashtag", "image", "link", "mention", "phone"].includes(token.type)) {
         const tokenKey = uuidV1();
         hashObject[tokenKey] = token;
         return tokenKey;
