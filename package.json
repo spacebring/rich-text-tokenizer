@@ -1,6 +1,6 @@
 {
   "name": "rich-text-tokenizer",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Rich text and markdown tokenization made easy.",
   "keywords": [
     "markdown",
