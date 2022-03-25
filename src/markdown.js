@@ -62,8 +62,11 @@ function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
 
 function getResultFromTokenUrl(token) {
   const [value, href] = token.slice(1);
-  if (value && href) {
+  if (href) {
     const children = parseMarkdownStrikethroughAndBoldAndItalic(value);
+    if (children.length === 0) {
+      return { type: "link", href, value };
+    }
     if (children.length === 1 && children[0].type === "text") {
       return { type: "link", href, value };
     }
@@ -74,7 +77,7 @@ function getResultFromTokenUrl(token) {
 
 function getResultFromTokenImage(token) {
   const [value, href] = token.slice(1);
-  if (value && href) {
+  if (href) {
     return { type: "image", href, value };
   }
   return null;
