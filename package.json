@@ -1,6 +1,6 @@
 {
   "name": "rich-text-tokenizer",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Rich text and markdown tokenization made easy.",
   "keywords": [
     "markdown",
@@ -24,8 +24,7 @@
   ],
   "main": "lib/index.js",
   "dependencies": {
-    "hashtag-regex": "^2.1.0",
-    "url-regex": "^5.0.0"
+    "hashtag-regex": "^2.1.0"
   },
   "devDependencies": {
     "babel": "^6.3.26",

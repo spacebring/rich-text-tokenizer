@@ -1,5 +1,4 @@
 import hashtagRegex from "hashtag-regex";
-import urlRegex from "url-regex";
 
 // Reference: https://www.regular-expressions.info/email.html
 export const REGEX_EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
@@ -7,8 +6,11 @@ export const REGEX_HASHTAG = hashtagRegex();
 // Reference: https://stackoverflow.com/a/15265606/1308757
 export const REGEX_MENTION = /\B@[a-z0-9_-]+/;
 // Reference: https://github.com/gregjacobs/Autolinker.js/blob/ca4b19d76074e5e5e4e8fc11d3d73dbce40f5132/src/matcher/phone-matcher.ts#L14
-export const REGEX_PHONE = /(?:(?:(?:(\+)?\d{1,3}[-\040.]?)?\(?\d{3}\)?[-\040.]?\d{3}[-\040.]?\d{4})|(?:(\+)(?:9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)[-\040.]?(?:\d[-\040.]?){6,12}\d+))([,;]+[0-9]+#?)*/;
-export const REGEX_URL_NAKED = urlRegex();
+export const REGEX_PHONE =
+  /(?:(?:(?:(\+)?\d{1,3}[-\040.]?)?\(?\d{3}\)?[-\040.]?\d{3}[-\040.]?\d{4})|(?:(\+)(?:9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)[-\040.]?(?:\d[-\040.]?){6,12}\d+))([,;]+[0-9]+#?)*/;
+// Reference: https://github.com/kevva/url-regex
+export const REGEX_URL_NAKED =
+  /(?:(?:(?:[a-z]+:)?\/\/)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?:(?:[a-z\u00a1-\uffff0-9][-_]*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?/gi;
 
 export function getResultFromTokenEmail(token) {
   if (token[0]) {
