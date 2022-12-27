@@ -1,4 +1,3 @@
-import { v1 as uuidV1 } from "uuid";
 import {
   REGEX_EMAIL,
   REGEX_HASHTAG,
@@ -157,7 +156,7 @@ function parseMarkdown(markdown) {
   const markdownWithoutPrimitives = parseMarkdownPrimitives(markdown)
     .map((token) => {
       if (["email", "hashtag", "image", "link", "mention", "phone"].includes(token.type)) {
-        const tokenKey = uuidV1();
+        const tokenKey = Date.now().toString(36) + Math.random().toString(36).substring(2);
         hashObject[tokenKey] = token;
         return tokenKey;
       }

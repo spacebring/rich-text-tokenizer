@@ -25,8 +25,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "hashtag-regex": "^2.1.0",
-    "url-regex": "^5.0.0",
-    "uuid": "^8.3.2"
+    "url-regex": "^5.0.0"
   },
   "devDependencies": {
     "babel": "^6.3.26",
