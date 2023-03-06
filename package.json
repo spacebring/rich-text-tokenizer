@@ -1,7 +1,8 @@
 {
   "name": "rich-text-tokenizer",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Rich text and markdown tokenization made easy.",
+  "type": "module",
   "keywords": [
     "markdown",
     "rich",
@@ -11,7 +12,7 @@
   "scripts": {
     "lint": "eslint src",
     "test": "mocha --recursive",
-    "build": "npm run lint && npm test && esbuild ./src/index.mjs --bundle --outdir=lib"
+    "build": "npm run lint && npm test && esbuild src/index.js --bundle --format=cjs --outfile=lib/index.cjs"
   },
   "license": "MIT",
   "repository": {
@@ -21,7 +22,7 @@
   "files": [
     "lib"
   ],
-  "main": "lib/index.js",
+  "main": "lib/index.cjs",
   "dependencies": {
     "hashtag-regex": "^2.1.0"
   },
