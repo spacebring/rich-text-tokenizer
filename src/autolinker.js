@@ -1,16 +1,8 @@
-import hashtagRegex from "hashtag-regex";
-
-// Reference: https://www.regular-expressions.info/email.html
-export const REGEX_EMAIL = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
-export const REGEX_HASHTAG = hashtagRegex();
-// Reference: https://stackoverflow.com/a/15265606/1308757
-export const REGEX_MENTION = /\B@[a-z0-9_-]+/;
-// Reference: https://github.com/gregjacobs/Autolinker.js/blob/ca4b19d76074e5e5e4e8fc11d3d73dbce40f5132/src/matcher/phone-matcher.ts#L14
-export const REGEX_PHONE =
-  /(?:(?:(?:(\+)?\d{1,3}[-\040.]?)?\(?\d{3}\)?[-\040.]?\d{3}[-\040.]?\d{4})|(?:(\+)(?:9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)[-\040.]?(?:\d[-\040.]?){6,12}\d+))([,;]+[0-9]+#?)*/;
-// Reference: https://github.com/kevva/url-regex
-export const REGEX_URL_NAKED =
-  /(?:(?:(?:[a-z]+:)?\/\/)|www\.)(?:\S+(?::\S*)?@)?(?:localhost|(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?:(?:[a-z\u00a1-\uffff0-9][-_]*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#][^\s"]*)?/gi;
+import parseEmail from "./parse-email.js";
+import parseHashtag from "./parse-hashtag.js";
+import parseMention from "./parse-mention.js";
+import parseValidPhoneNumber from "./parse-phone-number.js";
+import parseUrlNaked from "./parse-url.js";
 
 export function getResultFromTokenEmail(token) {
   if (token[0]) {
@@ -62,7 +54,7 @@ export function parseToken({ parse, result, text, token }) {
 }
 
 export function parseText(text) {
-  const tokenUrlNaked = REGEX_URL_NAKED.exec(text);
+  const tokenUrlNaked = parseUrlNaked(text);
   if (tokenUrlNaked) {
     return parseToken({
       parse: parseText,
@@ -71,7 +63,7 @@ export function parseText(text) {
       token: tokenUrlNaked,
     });
   }
-  const tokenHashtag = REGEX_HASHTAG.exec(text);
+  const tokenHashtag = parseHashtag(text);
   if (tokenHashtag) {
     return parseToken({
       parse: parseText,
@@ -80,7 +72,7 @@ export function parseText(text) {
       token: tokenHashtag,
     });
   }
-  const tokenMention = REGEX_MENTION.exec(text);
+  const tokenMention = parseMention(text);
   if (tokenMention) {
     return parseToken({
       parse: parseText,
@@ -89,7 +81,7 @@ export function parseText(text) {
       token: tokenMention,
     });
   }
-  const tokenEmail = REGEX_EMAIL.exec(text);
+  const tokenEmail = parseEmail(text);
   if (tokenEmail) {
     return parseToken({
       parse: parseText,
@@ -98,7 +90,7 @@ export function parseText(text) {
       token: tokenEmail,
     });
   }
-  const tokenPhone = REGEX_PHONE.exec(text);
+  const tokenPhone = parseValidPhoneNumber(text);
   if (tokenPhone) {
     return parseToken({
       parse: parseText,

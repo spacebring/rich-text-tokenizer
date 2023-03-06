@@ -1,9 +1,4 @@
 import {
-  REGEX_EMAIL,
-  REGEX_HASHTAG,
-  REGEX_MENTION,
-  REGEX_PHONE,
-  REGEX_URL_NAKED,
   getResultFromTokenEmail,
   getResultFromTokenHashtag,
   getResultFromTokenMention,
@@ -11,8 +6,13 @@ import {
   getResultFromTokenUrlNaked,
   getTypeText,
   parseToken,
-} from "./autolinker";
-import replaceHashesWithTokens from "./hash";
+} from "./autolinker.js";
+import parseEmail from "./parse-email.js";
+import replaceHashesWithTokens from "./hash.js";
+import parseHashtag from "./parse-hashtag.js";
+import parseMention from "./parse-mention.js";
+import parseValidPhoneNumber from "./parse-phone-number.js";
+import parseUrlNaked from "./parse-url.js";
 
 // Reference: https://www.bigomega.dev/markdown-parser
 const REGEX_MARKDOWN_TEXT = /(\*\*)(.*?)\1|(__)(.*?)\3|(\*)(.*?)\5|(_)(.*?)\7|(~~)(.*?)\9/;
@@ -39,7 +39,7 @@ function getResultFromToken(token) {
 }
 
 function parseMarkdownStrikethroughAndBoldAndItalic(markdown) {
-  const tokenUrlNaked = REGEX_URL_NAKED.exec(markdown);
+  const tokenUrlNaked = parseUrlNaked(markdown);
   if (tokenUrlNaked) {
     return getTypeText(markdown);
   }
@@ -102,7 +102,7 @@ function parseMarkdownPrimitives(text) {
       token: tokenUrl,
     });
   }
-  const tokenUrlNaked = REGEX_URL_NAKED.exec(text);
+  const tokenUrlNaked = parseUrlNaked(text);
   if (tokenUrlNaked) {
     return parseToken({
       parse: parseMarkdownPrimitives,
@@ -111,7 +111,7 @@ function parseMarkdownPrimitives(text) {
       token: tokenUrlNaked,
     });
   }
-  const tokenHashtag = REGEX_HASHTAG.exec(text);
+  const tokenHashtag = parseHashtag(text);
   if (tokenHashtag) {
     return parseToken({
       parse: parseMarkdownPrimitives,
@@ -120,7 +120,7 @@ function parseMarkdownPrimitives(text) {
       token: tokenHashtag,
     });
   }
-  const tokenMention = REGEX_MENTION.exec(text);
+  const tokenMention = parseMention(text);
   if (tokenMention) {
     return parseToken({
       parse: parseMarkdownPrimitives,
@@ -129,7 +129,7 @@ function parseMarkdownPrimitives(text) {
       token: tokenMention,
     });
   }
-  const tokenEmail = REGEX_EMAIL.exec(text);
+  const tokenEmail = parseEmail(text);
   if (tokenEmail) {
     return parseToken({
       parse: parseMarkdownPrimitives,
@@ -138,7 +138,7 @@ function parseMarkdownPrimitives(text) {
       token: tokenEmail,
     });
   }
-  const tokenPhone = REGEX_PHONE.exec(text);
+  const tokenPhone = parseValidPhoneNumber(text);
   if (tokenPhone) {
     return parseToken({
       parse: parseMarkdownPrimitives,

@@ -1,7 +1,17 @@
 import { expect } from "chai";
-import { parseMarkdown } from "../src";
+import { parseMarkdown } from "../src/index.js";
 
 describe("parseMarkdown", () => {
+  it("should not return parsed phone number", () => {
+    expect(parseMarkdown(`GE69TB7916245061200010`)).is.deep.equal([{ type: "text", value: "GE69TB7916245061200010" }]);
+  });
+  it("should return parsed phone number", () => {
+    expect(parseMarkdown(`Here is my number: +380976025791 :)`)).is.deep.equal([
+      { type: "text", value: "Here is my number: " },
+      { href: "+380976025791", type: "phone", value: "+380976025791" },
+      { type: "text", value: " :)" },
+    ]);
+  });
   it("should return parsed email in bold text", () => {
     expect(parseMarkdown(`**rk@andcards.com**`)).is.deep.equal([
       { type: "bold", children: [{ href: "rk@andcards.com", type: "email", value: "rk@andcards.com" }] },
@@ -77,8 +87,7 @@ describe("parseMarkdown", () => {
         value: "Вечір п'ятниці для відвертих тем і міцних жартів. Приходьте на ",
       },
       {
-        href:
-          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        href: "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         type: "link",
         value: "Пристойний Стндап",
       },
@@ -94,8 +103,7 @@ describe("parseMarkdown", () => {
         value: "Вечір п'ятниці для відвертих тем і міцних жартів. Приходьте на ",
       },
       {
-        href:
-          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        href: "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         type: "image",
         value: "Пристойний Стндап",
       },
@@ -111,8 +119,7 @@ describe("parseMarkdown", () => {
         value: "Вечір п'ятниці для відвертих тем і міцних жартів. Приходьте на ",
       },
       {
-        href:
-          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        href: "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         type: "image",
         value: "",
       },
@@ -182,8 +189,7 @@ describe("parseMarkdown", () => {
     ).is.deep.equal([
       {
         type: "link",
-        href:
-          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        href: "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         value:
           "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
       },
@@ -196,8 +202,7 @@ describe("parseMarkdown", () => {
     ).is.deep.equal([
       {
         type: "link",
-        href:
-          "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
+        href: "https://www.facebook.com/events/656828768259069/?acontext=%7B%22event_action_history%22%3A[%7B%22mechanism%22%3A%22search_results%22%2C%22surface%22%3A%22search%22%7D]%7D",
         value: "",
       },
       { type: "text", value: " ::)" },

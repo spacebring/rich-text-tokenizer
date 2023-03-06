@@ -1,4 +1,12 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb/base", "prettier", "prettier/prettier"]
+  "extends": ["airbnb/base", "prettier", "prettier/prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "import/extensions": ["error", "ignorePackages", { "js": "always" }]
+  }
 }
