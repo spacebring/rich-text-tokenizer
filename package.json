@@ -1,6 +1,6 @@
 {
   "name": "rich-text-tokenizer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Rich text and markdown tokenization made easy.",
   "type": "module",
   "keywords": [
@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "lint": "eslint src",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "build": "npm run lint && npm test && esbuild ./src/index.js --bundle --outdir=lib"
   },
   "license": "MIT",
   "repository": {
@@ -19,14 +20,15 @@
     "url": "git@github.com:andcards/rich-text-tokenizer.git"
   },
   "files": [
-    "src"
+    "lib"
   ],
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "hashtag-regex": "^2.1.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",
+    "esbuild": "0.17.11",
     "eslint": "^8.35.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.7.0",
