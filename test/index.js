@@ -8,9 +8,11 @@ describe("parseMarkdown", () => {
     ]);
   });
   it("should return parsed phone number", () => {
-    expect(parseMarkdown(`Here is my number: +380976025791 :)`)).is.deep.equal([
+    expect(parseMarkdown(`Here is my number: +380976328791 and +380 44 334 1234 :)`)).is.deep.equal([
       { type: "text", value: "Here is my number: " },
-      { href: "+380976025791", type: "phone", value: "+380976025791" },
+      { href: "+380976328791", type: "phone", value: "+380976328791" },
+      { type: "text", value: " and " },
+      { href: "+380 44 334 1234", type: "phone", value: "+380 44 334 1234" },
       { type: "text", value: " :)" },
     ]);
   });
