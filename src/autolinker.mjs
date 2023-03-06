@@ -1,8 +1,8 @@
-import parseEmail from "./parse-email.js";
-import parseHashtag from "./parse-hashtag.js";
-import parseMention from "./parse-mention.js";
-import parseValidPhoneNumber from "./parse-phone-number.js";
-import parseUrlNaked from "./parse-url.js";
+import parseEmail from "./parse-email.mjs";
+import parseHashtag from "./parse-hashtag.mjs";
+import parseMention from "./parse-mention.mjs";
+import parseValidPhoneNumber from "./parse-phone-number.mjs";
+import parseUrlNaked from "./parse-url.mjs";
 
 export function getResultFromTokenEmail(token) {
   if (token[0]) {

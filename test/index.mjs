@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { parseMarkdown } from "../src/index.js";
+import { parseMarkdown } from "../src/index.mjs";
 
 describe("parseMarkdown", () => {
   it("should not return parsed phone number", () => {

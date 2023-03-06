@@ -6,13 +6,13 @@ import {
   getResultFromTokenUrlNaked,
   getTypeText,
   parseToken,
-} from "./autolinker.js";
-import parseEmail from "./parse-email.js";
-import replaceHashesWithTokens from "./hash.js";
-import parseHashtag from "./parse-hashtag.js";
-import parseMention from "./parse-mention.js";
-import parseValidPhoneNumber from "./parse-phone-number.js";
-import parseUrlNaked from "./parse-url.js";
+} from "./autolinker.mjs";
+import parseEmail from "./parse-email.mjs";
+import replaceHashesWithTokens from "./hash.mjs";
+import parseHashtag from "./parse-hashtag.mjs";
+import parseMention from "./parse-mention.mjs";
+import parseValidPhoneNumber from "./parse-phone-number.mjs";
+import parseUrlNaked from "./parse-url.mjs";
 
 // Reference: https://www.bigomega.dev/markdown-parser
 const REGEX_MARKDOWN_TEXT = /(\*\*)(.*?)\1|(__)(.*?)\3|(\*)(.*?)\5|(_)(.*?)\7|(~~)(.*?)\9/;
