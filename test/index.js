@@ -3,7 +3,9 @@ import { parseMarkdown } from "../src/index.js";
 
 describe("parseMarkdown", () => {
   it("should not return parsed phone number", () => {
-    expect(parseMarkdown(`GE69TB7916245061200010`)).is.deep.equal([{ type: "text", value: "GE69TB7916245061200010" }]);
+    expect(parseMarkdown("bla bla\n\nGE69TB7916245061200010")).is.deep.equal([
+      { type: "text", value: "bla bla\n\nGE69TB7916245061200010" },
+    ]);
   });
   it("should return parsed phone number", () => {
     expect(parseMarkdown(`Here is my number: +380976025791 :)`)).is.deep.equal([
