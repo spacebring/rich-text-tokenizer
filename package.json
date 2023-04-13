@@ -1,6 +1,6 @@
 {
   "name": "rich-text-tokenizer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Rich text and markdown tokenization made easy.",
   "type": "module",
   "keywords": [
@@ -24,7 +24,8 @@
   ],
   "main": "lib/index.cjs",
   "dependencies": {
-    "hashtag-regex": "^2.1.0"
+    "hashtag-regex": "^2.1.0",
+    "url-regex-safe": "^3.0.0"
   },
   "devDependencies": {
     "chai": "^4.3.7",

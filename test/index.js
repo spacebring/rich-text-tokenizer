@@ -211,5 +211,12 @@ describe("parseMarkdown", () => {
       },
       { type: "text", value: " ::)" },
     ]);
+    expect(
+      parseMarkdown("Забронювати та оплатити місце можна через застосунок - https://k15.andcards.com.")
+    ).is.deep.equal([
+      { type: "text", value: "Забронювати та оплатити місце можна через застосунок - " },
+      { type: "link", href: "https://k15.andcards.com", value: "https://k15.andcards.com" },
+      { type: "text", value: "." },
+    ]);
   });
 });
