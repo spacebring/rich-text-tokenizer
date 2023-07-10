@@ -15,6 +15,15 @@ describe("parseMarkdown", () => {
       { href: "+380 44 334 1234", type: "phone", value: "+380 44 334 1234" },
       { type: "text", value: " :)" },
     ]);
+    expect(
+      parseMarkdown(
+        `Деталі у адміністратора +38 (097) 123 45 56. У випадку. 25. Можна запросити з собою кого вважаєте за потрібне.`
+      )
+    ).is.deep.equal([
+      { type: "text", value: "Деталі у адміністратора " },
+      { href: "+38 (097) 123 45 56", type: "phone", value: "+38 (097) 123 45 56" },
+      { type: "text", value: ". У випадку. 25. Можна запросити з собою кого вважаєте за потрібне." },
+    ]);
   });
   it("should return parsed email in bold text", () => {
     expect(parseMarkdown(`**rk@andcards.com**`)).is.deep.equal([
