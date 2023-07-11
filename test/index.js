@@ -2,6 +2,9 @@ import { expect } from "chai";
 import { parseMarkdown } from "../src/index.js";
 
 describe("parseMarkdown", () => {
+  it("should not crash when no string", () => {
+    expect(parseMarkdown()).is.deep.equal([]);
+  });
   it("should not return parsed phone number", () => {
     expect(parseMarkdown("bla bla\n\nGE69TB7916245061200010")).is.deep.equal([
       { type: "text", value: "bla bla\n\nGE69TB7916245061200010" },
