@@ -4,6 +4,7 @@ import { parseMarkdown } from "../src/index.js";
 describe("parseMarkdown", () => {
   it("should not crash when no string", () => {
     expect(parseMarkdown()).is.deep.equal([]);
+    expect(parseMarkdown(["Text", { foo: "bar" }])).is.deep.equal([{ type: "text", value: "Text,[object Object]" }]);
   });
   it("should not return parsed phone number", () => {
     expect(parseMarkdown("bla bla\n\nGE69TB7916245061200010")).is.deep.equal([

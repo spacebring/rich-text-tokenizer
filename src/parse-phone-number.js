@@ -1,7 +1,10 @@
 import { findPhoneNumbersInText } from "libphonenumber-js";
 
 function parseValidPhoneNumber(text) {
-  const matches = findPhoneNumbersInText(text ?? "");
+  if (typeof text !== "string") {
+    return null;
+  }
+  const matches = findPhoneNumbersInText(text);
   if (matches.length > 0) {
     const match = matches[0];
     const token = [text.substring(match.startsAt, match.endsAt)];
