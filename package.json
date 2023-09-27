@@ -25,8 +25,8 @@
   "main": "lib/index.cjs",
   "dependencies": {
     "hashtag-regex": "^2.1.0",
-    "libphonenumber-js": "^1.10.44",
-    "url-regex-safe": "^3.0.0"
+    "libphonenumber-js": "^1.10.45",
+    "url-regex-safe": "^4.0.0"
   },
   "devDependencies": {
     "esbuild": "0.19.3",
